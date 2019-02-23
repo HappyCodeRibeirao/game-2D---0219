@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class heroController : MonoBehaviour {
 
@@ -8,7 +9,13 @@ public class heroController : MonoBehaviour {
     public CharacterController2D moveController;
     public float velocidade;
     public Animator animator;
-    public int lives;
+
+    public Sprite[] hearts;
+    public Image lifeHud;
+
+    int heart = 1;
+
+    
 
     private void FixedUpdate()
     {
@@ -40,25 +47,28 @@ public class heroController : MonoBehaviour {
             else
             {
                 animator.SetBool("isRunning",false);
+                moveController.Move(0, false, false);
             }
         }
         
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D (Collision2D collision)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.gameObject.tag == "Inimigo")
         {
-            if (lives > 0)
-            {
-                lives = lives - 1;
-            }
-            else
+            heart++;
+            
+            if (heart > hearts.Length)
             {
                 Destroy(gameObject);
+                return;
             }
-            
+
+            lifeHud.sprite = hearts[heart - 1];
         }
     }
 
 }
+
+
