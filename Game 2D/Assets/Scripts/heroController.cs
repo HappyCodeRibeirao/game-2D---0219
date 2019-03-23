@@ -13,9 +13,10 @@ public class heroController : MonoBehaviour {
     public Sprite[] hearts;
     public Image lifeHud;
 
+    public Text pointstext;
+
     int heart = 1;
-
-
+    int points = 0;
 
     private void FixedUpdate()
     {
@@ -53,21 +54,35 @@ public class heroController : MonoBehaviour {
         
     }
 
-    private void OnCollisionEnter2D (Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Inimigo")
         {
             heart++;
-            
-            if (heart > hearts.Length)
+            lifeHud.sprite = hearts[heart - 1];
+
+            if (heart == hearts.Length)
             {
                 Destroy(gameObject);
                 return;
             }
-
-            lifeHud.sprite = hearts[heart - 1];
         }
 
+        if (collision.gameObject.name == "Coin")
+        {
+            Destroy(collision.gameObject, (float)0);
+            if (heart == 1)
+            {
+                points = points + 100;
+                pointstext.text = points.ToString();
+            }
+
+            else
+            {
+                points = points + 10;
+                pointstext.text = points.ToString();
+            }
+        }
     }
 
 }
